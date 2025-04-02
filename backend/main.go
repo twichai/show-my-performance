@@ -2,6 +2,8 @@ package main
 
 import (
 	"log"
+	"show-my-performance/backend/adapters"
+	"show-my-performance/backend/core"
 
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/driver/sqlite"
@@ -30,15 +32,12 @@ func main() {
 	app := fiber.New()
 	initDB()
 
+	userRepository := adapters.NewGormUserRepository(DB)
+	userService := core.NewOrderService(userRepository)
+	userHandler := adapters.NewUserHandler(userService)
+
 	// Create a user
-	app.Post("/users", func(c *fiber.Ctx) error {
-		user := new(User)
-		if err := c.BodyParser(user); err != nil {
-			return c.Status(400).JSON(err.Error())
-		}
-		DB.Create(&user)
-		return c.JSON(user)
-	})
+	app.Post("/users", userHandler.RegisterUser)
 
 	// Get all users
 	app.Get("/users", func(c *fiber.Ctx) error {
