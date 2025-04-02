@@ -1,0 +1,24 @@
+meta {
+  name: Registor User
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost:3000/users
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "username": "johndoe",
+    "password": "securepassword123",
+    "email": "johndoe@example.com",
+    "first_name": "John",
+    "last_name": "Doe",
+    "phone_number": "+1234567890"
+  }
+  
+  
+}
