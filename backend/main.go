@@ -6,6 +6,8 @@ import (
 	"show-my-performance/backend/core"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 
@@ -28,13 +30,20 @@ func main() {
 	app := fiber.New()
 	initDB()
 
+	app.Use(logger.New(logger.Config{}))
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: "*",                            // Allow all origins (use specific domains in production)
+		AllowMethods: "GET,POST,PUT,DELETE",          // Allowed HTTP methods
+		AllowHeaders: "Origin, Content-Type, Accept", // Allowed headers
+	}))
+
 	userRepository := adapters.NewGormUserRepository(DB)
 	userService := core.NewOrderService(userRepository)
 	userHandler := adapters.NewUserHandler(userService)
 
 	// Create a user
 	app.Post("/users", userHandler.RegisterUser)
-	app.Get("/login", userHandler.Login)
+	app.Post("/login", userHandler.Login)
 
 	app.Use(jwtware.New(jwtware.Config{
 		SigningKey: jwtware.SigningKey{Key: []byte("secret")},

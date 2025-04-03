@@ -21,11 +21,12 @@ func NewUserHandler(userService core.UserService) *UserHandler {
 func (h *UserHandler) Login(c *fiber.Ctx) error {
 	var user core.User
 	if err := c.BodyParser(&user); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid input"})
+		print(err.Error())
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": "Invalid input"})
 	}
 
 	if err := h.userService.Login(user); err != nil {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Invalid credentials"})
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"message": "Invalid email or password"})
 	}
 
 	claims := jwt.MapClaims{
