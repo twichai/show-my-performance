@@ -1,0 +1,55 @@
+<div class="flex min-h-screen items-center justify-center bg-gray-900">
+  <div class="card w-96 bg-gray-800 shadow-xl p-6 text-gray-200">
+    <h2 class="text-2xl font-bold text-center mb-4">Login</h2>
+    <form [formGroup]="loginForm" class="space-y-4" (ngSubmit)="onSubmit()">
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text text-gray-300">Email</span>
+        </label>
+        <input
+          formControlName="email"
+          type="email"
+          class="input input-bordered w-full bg-gray-700 text-gray-200 placeholder-gray-400"
+          placeholder="Enter your email"
+        />
+
+        @if( loginForm.get('email')?.invalid && loginForm.get('email')?.touched)
+        {
+        <div class="text-red-500 text-sm">Please enter a valid email.</div>
+        }
+      </div>
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text text-gray-300">Password</span>
+        </label>
+        <input
+          formControlName="password"
+          type="password"
+          class="input input-bordered w-full bg-gray-700 text-gray-200 placeholder-gray-400"
+          placeholder="Enter your password"
+        />
+
+        @if( loginForm.get('password')?.invalid &&
+        loginForm.get('password')?.touched ) {
+        <div class="text-red-500 text-sm">
+          Password must be at least 6 characters.
+        </div>
+        }
+      </div>
+      @if (errorMessage) {
+      <div class="text-red-500 text-sm text-start">{{ errorMessage }} eee</div>
+      }
+      <button
+        type="submit"
+        class="btn btn-primary w-full bg-blue-600 hover:bg-blue-700 text-white"
+        [disabled]="loginForm.invalid"
+      >
+        Login
+      </button>
+    </form>
+    <p class="text-center text-sm mt-4 text-gray-400">
+      Don't have an account?
+      <a class="text-blue-400 hover:underline" href="#">Sign up</a>
+    </p>
+  </div>
+</div>
