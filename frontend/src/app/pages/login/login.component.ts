@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { LoginService } from '../../services/login.service';
 import { Token } from '../../model/token.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -16,6 +17,7 @@ import { Token } from '../../model/token.model';
 })
 export class LoginComponent {
   private loginService = inject(LoginService);
+  private route = inject(Router);
   loginForm = new FormGroup({
     email: new FormControl('johndoe@example.com', [
       Validators.required,
@@ -40,6 +42,7 @@ export class LoginComponent {
             if (response.token) {
               localStorage.setItem('token', response.token);
               this.errorMessage = '';
+              this.route.navigate(['/']);
               // Redirect to the dashboard or another page
             } else {
               this.errorMessage = 'Invalid email or password';
