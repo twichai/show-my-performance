@@ -8,6 +8,8 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+
+	jwtware "github.com/gofiber/contrib/jwt"
 )
 
 var DB *gorm.DB
@@ -32,7 +34,18 @@ func main() {
 
 	// Create a user
 	app.Post("/users", userHandler.RegisterUser)
+	app.Get("/login", userHandler.Login)
 
+	app.Use(jwtware.New(jwtware.Config{
+		SigningKey: jwtware.SigningKey{Key: []byte("secret")},
+	}))
+
+	app.Get("/test",
+		func(c *fiber.Ctx) error {
+			return c.JSON(fiber.Map{
+				"message": "Hello, World!",
+			})
+		})
 	// Start server
 	log.Fatal(app.Listen(":3000"))
 }

@@ -10,6 +10,15 @@ type GormUserRepository struct {
 	db *gorm.DB
 }
 
+// GetByEmail implements core.UserRepository.
+func (r *GormUserRepository) GetByEmail(userEmail string) (*core.User, error) {
+	var user core.User
+	if err := r.db.Where("email = ?", userEmail).First(&user).Error; err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
 type GormOrderRepository struct {
 	db *gorm.DB
 }
