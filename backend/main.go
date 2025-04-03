@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 	"show-my-performance/backend/adapters"
 	"show-my-performance/backend/core"
 
@@ -12,6 +13,8 @@ import (
 	"gorm.io/gorm"
 
 	jwtware "github.com/gofiber/contrib/jwt"
+	"github.com/golang-jwt/jwt/v5"
+	"github.com/joho/godotenv"
 )
 
 var DB *gorm.DB
@@ -24,11 +27,18 @@ func initDB() {
 		log.Fatal("Failed to connect to the database:", err)
 	}
 	DB.AutoMigrate(&core.User{}) // AutoMigrate will create the table if it doesn't exist
+	DB.AutoMigrate(&core.Post{}) // AutoMigrate will create the table if it doesn't exist
 }
 
 func main() {
 	app := fiber.New()
 	initDB()
+
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+	secretKey := os.Getenv("SECRET_KEY")
 
 	app.Use(logger.New(logger.Config{}))
 	app.Use(cors.New(cors.Config{
@@ -45,7 +55,7 @@ func main() {
 	app.Post("/login", userHandler.Login)
 
 	app.Use(jwtware.New(jwtware.Config{
-		SigningKey: jwtware.SigningKey{Key: []byte("secret")},
+		SigningKey: jwtware.SigningKey{Key: []byte(secretKey)},
 	}))
 
 	postRepository := adapters.NewGormPostRepository(DB)
@@ -61,9 +71,9 @@ func main() {
 
 	app.Get("/test",
 		func(c *fiber.Ctx) error {
-			return c.JSON(fiber.Map{
-				"message": "Hello, World!",
-			})
+			user := c.Locals("user").(*jwt.Token)
+			claims := user.Claims.(jwt.MapClaims)
+			return c.SendString("Welcome " + claims["email"].(string))
 		})
 	// Start server
 	log.Fatal(app.Listen(":3000"))

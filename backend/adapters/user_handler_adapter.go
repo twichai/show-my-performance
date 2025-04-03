@@ -1,6 +1,7 @@
 package adapters
 
 import (
+	"os"
 	"show-my-performance/backend/core"
 	"time"
 
@@ -30,14 +31,16 @@ func (h *UserHandler) Login(c *fiber.Ctx) error {
 	}
 
 	claims := jwt.MapClaims{
-		"name":  "John Doe",
-		"admin": true,
-		"exp":   time.Now().Add(time.Hour * 72).Unix(),
+		"user_id": &user.ID,
+		"email":   &user.Email,
+		"name":    &user.Username,
+		"exp":     time.Now().Add(time.Hour * 72).Unix(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	// Generate encoded token and send it as response.
-	t, err := token.SignedString([]byte("secret"))
+	secretKey := os.Getenv("SECRET_KEY")
+	t, err := token.SignedString([]byte(secretKey))
+
 	if err != nil {
 		return c.SendStatus(fiber.StatusInternalServerError)
 	}
