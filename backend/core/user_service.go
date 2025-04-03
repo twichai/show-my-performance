@@ -61,7 +61,7 @@ func (o *userServiceImpl) RegisterUser(user User) error {
 	return nil
 }
 
-func NewOrderService(repo UserRepository) UserService {
+func NewUserService(repo UserRepository) UserService {
 	return &userServiceImpl{
 		repo: repo,
 	}

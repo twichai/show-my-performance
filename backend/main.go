@@ -48,7 +48,7 @@ func main() {
 	}))
 
 	userRepository := adapters.NewGormUserRepository(DB)
-	userService := core.NewOrderService(userRepository)
+	userService := core.NewUserService(userRepository)
 	userHandler := adapters.NewUserHandler(userService)
 
 	app.Post("/signup", userHandler.RegisterUser)
