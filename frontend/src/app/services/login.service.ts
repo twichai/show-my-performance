@@ -21,8 +21,29 @@ export class LoginService {
     const body = { email, password };
     return this.http.post<Token>(`${this.apiUrl}/login`, body);
   }
-
-  ping(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/ping`);
+  signUp({
+    username,
+    password,
+    email,
+    firstName,
+    lastName,
+    phoneNumber,
+  }: {
+    username: string;
+    password: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+  }): Observable<Token> {
+    const body = {
+      username,
+      password,
+      email,
+      firstName,
+      lastName,
+      phoneNumber,
+    };
+    return this.http.post<Token>(`${this.apiUrl}/signup`, body);
   }
 }

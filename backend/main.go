@@ -42,7 +42,7 @@ func main() {
 	userHandler := adapters.NewUserHandler(userService)
 
 	// Create a user
-	app.Post("/users", userHandler.RegisterUser)
+	app.Post("/signup", userHandler.RegisterUser)
 	app.Post("/login", userHandler.Login)
 
 	app.Use(jwtware.New(jwtware.Config{
