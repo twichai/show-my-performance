@@ -41,13 +41,23 @@ func main() {
 	userService := core.NewOrderService(userRepository)
 	userHandler := adapters.NewUserHandler(userService)
 
-	// Create a user
 	app.Post("/signup", userHandler.RegisterUser)
 	app.Post("/login", userHandler.Login)
 
 	app.Use(jwtware.New(jwtware.Config{
 		SigningKey: jwtware.SigningKey{Key: []byte("secret")},
 	}))
+
+	postRepository := adapters.NewGormPostRepository(DB)
+	postService := core.NewPostService(postRepository)
+	postHandler := adapters.NewPostHandler(postService)
+
+	app.Get("/posts", postHandler.GetAllPosts)
+	app.Get("/posts/:id", postHandler.GetPostByID)
+	app.Post("/posts", postHandler.CreatePost)
+	app.Put("/posts/:id", postHandler.UpdatePost)
+	app.Delete("/posts/:id", postHandler.DeletePost)
+	app.Get("/posts/user/:userID", postHandler.GetPostsByUserID)
 
 	app.Get("/test",
 		func(c *fiber.Ctx) error {
