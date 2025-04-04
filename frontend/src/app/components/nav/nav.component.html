@@ -1,7 +1,50 @@
-<nav class="bg-gray-900 p-4 flex justify-between">
-  <a routerLink="/" class="text-white text-lg font-bold cursor-pointer">Logo</a>
-  <div>
-    <a routerLink="/login" class="text-gray-400 hover:text-white mr-4">Login</a>
-    <a routerLink="/signup" class="text-gray-400 hover:text-white">Sign Up</a>
+<nav class="bg-base-100 shadow-md flex justify-between items-center px-6 py-3">
+  <!-- Left: Logo -->
+  <div class="flex items-center space-x-2">
+    <img
+      src="https://www.redditinc.com/assets/images/site/reddit-logo.png"
+      class="h-8"
+    />
+    <span class="text-xl font-bold text-primary">Reddit Clone</span>
+  </div>
+
+  <!-- Center: Search Bar -->
+  <div class="form-control w-1/3">
+    <input
+      type="text"
+      placeholder="Search Reddit..."
+      class="input input-bordered w-full"
+    />
+  </div>
+
+  <!-- Right: Create Post, User Profile & Icons -->
+  <div class="flex items-center space-x-4">
+    <!-- Create Post Button -->
+    <button class="btn btn-primary" (click)="goToCreatePost()">
+      ✏️ Create Post
+    </button>
+
+    <button class="btn btn-ghost">
+      <i class="fas fa-bell"></i>
+    </button>
+    <button class="btn btn-ghost">
+      <i class="fas fa-envelope"></i>
+    </button>
+
+    <!-- Profile Dropdown -->
+    <div class="dropdown dropdown-end">
+      <div tabindex="0" class="btn btn-ghost flex items-center space-x-2">
+        <img src="https://i.pravatar.cc/40" class="rounded-full w-8 h-8" />
+        <span>u/Username</span>
+      </div>
+      <ul
+        tabindex="0"
+        class="menu dropdown-content bg-base-200 w-48 mt-3 shadow-lg rounded-box"
+      >
+        <li><a>Profile</a></li>
+        <li><a>Settings</a></li>
+        <li><a (click)="logout()">Logout</a></li>
+      </ul>
+    </div>
   </div>
 </nav>
