@@ -32,7 +32,11 @@ func (p *postServiceImpl) DeletePost(id uint) error {
 
 // GetAllPosts implements PostService.
 func (p *postServiceImpl) GetAllPosts() ([]Post, error) {
-	panic("unimplemented")
+	post, err := p.repo.GetAllPosts()
+	if err != nil {
+		return nil, err
+	}
+	return post, nil
 }
 
 // GetPostByID implements PostService.

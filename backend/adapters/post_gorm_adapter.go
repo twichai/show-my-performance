@@ -25,7 +25,11 @@ func (p *postGormRepository) DeletePost(id uint) error {
 
 // GetAllPosts implements core.PostRepository.
 func (p *postGormRepository) GetAllPosts() ([]core.Post, error) {
-	panic("unimplemented")
+	post := []core.Post{}
+	if p.db.Order("updated_at desc").Limit(10).Find(&post).Error != nil {
+		return nil, p.db.Error
+	}
+	return post, nil
 }
 
 // GetPostByID implements core.PostRepository.
