@@ -1,0 +1,40 @@
+<div class="max-w-4xl mx-auto mt-6">
+  <!-- Loop through posts -->
+  @for (post of posts; track post.id) {
+  <div class="card bg-base-100 shadow-xl mb-4">
+    <div class="p-4">
+      <!-- Post Header -->
+      <div class="flex items-center text-gray-500 text-sm">
+        <span>Posted by u/{{ post.username }} · {{ post.time }}</span>
+      </div>
+
+      <!-- Post Title -->
+      <h2 class="text-xl font-bold mt-1">{{ post.title }}</h2>
+
+      <!-- Post Content -->
+      <p class="mt-2 text-gray-400">{{ post.content }}</p>
+
+      <!-- Post Image (Optional) -->
+      @if (post.image) {
+      <img
+        [src]="post.image"
+        class="mt-2 rounded-lg max-h-60 w-full object-cover"
+      />
+      }
+
+      <!-- Actions: Upvote, Downvote, Comment -->
+      <div class="mt-3 flex items-center space-x-4">
+        <button class="btn btn-sm btn-ghost" (click)="upvote(post)">
+          👍 {{ post.upvotes }}
+        </button>
+        <button class="btn btn-sm btn-ghost" (click)="downvote(post)">
+          👎 {{ post.downvotes }}
+        </button>
+        <button class="btn btn-sm btn-ghost">
+          💬 {{ post.comments.length }} Comments
+        </button>
+      </div>
+    </div>
+  </div>
+  }
+</div>
