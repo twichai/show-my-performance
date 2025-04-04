@@ -5,6 +5,6 @@ type PostRepository interface {
 	GetPostByID(id uint) (*Post, error)
 	CreatePost(post *Post) error
 	UpdatePost(post *Post) error
-	DeletePost(id uint) error
+	DeletePost(id uint, userID uint) error
 	GetPostsByUserID(userID uint) ([]Post, error)
 }

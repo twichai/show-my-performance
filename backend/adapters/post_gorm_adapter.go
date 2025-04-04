@@ -19,8 +19,11 @@ func (p *postGormRepository) CreatePost(post *core.Post) error {
 }
 
 // DeletePost implements core.PostRepository.
-func (p *postGormRepository) DeletePost(id uint) error {
-	panic("unimplemented")
+func (p *postGormRepository) DeletePost(id uint, userID uint) error {
+	if result := p.db.Delete(&core.Post{}, id).Where(userID); result.Error != nil {
+		return result.Error
+	}
+	return nil
 }
 
 // GetAllPosts implements core.PostRepository.

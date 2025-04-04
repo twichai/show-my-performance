@@ -27,7 +27,11 @@ func (p *postServiceImpl) CreatePost(post *Post) (*Post, error) {
 
 // DeletePost implements PostService.
 func (p *postServiceImpl) DeletePost(id uint) error {
-	panic("unimplemented")
+	if err := p.repo.DeletePost(id, CurrentUser.ID); err != nil {
+		return err
+	}
+	return nil
+
 }
 
 // GetAllPosts implements PostService.
