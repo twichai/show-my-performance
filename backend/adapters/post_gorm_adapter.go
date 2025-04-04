@@ -30,7 +30,11 @@ func (p *postGormRepository) GetAllPosts() ([]core.Post, error) {
 
 // GetPostByID implements core.PostRepository.
 func (p *postGormRepository) GetPostByID(id uint) (*core.Post, error) {
-	panic("unimplemented")
+	post := &core.Post{}
+	if p.db.First(post, id).Error != nil {
+		return nil, p.db.Error
+	}
+	return post, nil
 }
 
 // GetPostsByUserID implements core.PostRepository.
