@@ -8,29 +8,29 @@ import (
 
 type UserService interface {
 	RegisterUser(user User) error
-	Login(user User) error
+	Login(user User) (*User, error)
 }
 type userServiceImpl struct {
 	repo UserRepository
 }
 
 // Login implements UserService.
-func (o *userServiceImpl) Login(user User) error {
+func (o *userServiceImpl) Login(user User) (*User, error) {
 	if user.Email == "" || user.Password == "" {
-		return fmt.Errorf("email and password are required")
+		return nil, fmt.Errorf("email and password are required")
 	}
 
 	existingUser, err := o.repo.GetByEmail(user.Email)
 	if err != nil || existingUser == nil {
-		return fmt.Errorf("invalid email or password")
+		return nil, fmt.Errorf("invalid email or password")
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(existingUser.Password), []byte(user.Password))
 	if err != nil {
-		return fmt.Errorf("invalid email or password")
+		return nil, fmt.Errorf("invalid email or password")
 	}
 
-	return nil
+	return existingUser, nil
 }
 
 func HashPassword(password string) (string, error) {

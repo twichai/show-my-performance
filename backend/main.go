@@ -30,6 +30,17 @@ func initDB() {
 	DB.AutoMigrate(&core.Post{}) // AutoMigrate will create the table if it doesn't exist
 }
 
+func getCurrentUser(c *fiber.Ctx) error {
+	user := c.Locals("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	userID := claims["user_id"].(float64)
+	email := claims["email"].(string)
+
+	core.CurrentUser.ID = uint(userID)
+	core.CurrentUser.Email = email
+	return c.Next()
+}
+
 func main() {
 	app := fiber.New()
 	initDB()
@@ -57,6 +68,7 @@ func main() {
 	app.Use(jwtware.New(jwtware.Config{
 		SigningKey: jwtware.SigningKey{Key: []byte(secretKey)},
 	}))
+	app.Use(getCurrentUser)
 
 	postRepository := adapters.NewGormPostRepository(DB)
 	postService := core.NewPostService(postRepository)

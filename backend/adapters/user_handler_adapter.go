@@ -26,14 +26,15 @@ func (h *UserHandler) Login(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": "Invalid input"})
 	}
 
-	if err := h.userService.Login(user); err != nil {
+	foundUser, err := h.userService.Login(user)
+	if err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"message": "Invalid email or password"})
 	}
 
 	claims := jwt.MapClaims{
-		"user_id": &user.ID,
-		"email":   &user.Email,
-		"name":    &user.Username,
+		"user_id": foundUser.ID,
+		"email":   foundUser.Email,
+		"name":    foundUser.Username,
 		"exp":     time.Now().Add(time.Hour * 72).Unix(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
