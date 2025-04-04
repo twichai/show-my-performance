@@ -1,5 +1,7 @@
 package core
 
+import "fmt"
+
 type PostService interface {
 	GetAllPosts() ([]Post, error)
 	GetPostByID(id uint) (*Post, error)
@@ -15,7 +17,12 @@ type postServiceImpl struct {
 
 // CreatePost implements PostService.
 func (p *postServiceImpl) CreatePost(post *Post) (*Post, error) {
-	panic("unimplemented")
+	post.UserID = CurrentUser.ID
+	fmt.Println("CurrentUser.ID", CurrentUser.ID)
+	if err := p.repo.CreatePost(post); err != nil {
+		return nil, err
+	}
+	return post, nil
 }
 
 // DeletePost implements PostService.

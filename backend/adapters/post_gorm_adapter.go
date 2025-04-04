@@ -12,7 +12,10 @@ type postGormRepository struct {
 
 // CreatePost implements core.PostRepository.
 func (p *postGormRepository) CreatePost(post *core.Post) error {
-	panic("unimplemented")
+	if result := p.db.Create(&post); result.Error != nil {
+		return result.Error
+	}
+	return nil
 }
 
 // DeletePost implements core.PostRepository.
