@@ -1,0 +1,22 @@
+meta {
+  name: Get Post By User
+  type: http
+  seq: 10
+}
+
+get {
+  url: http://localhost:3000/posts/user/1
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5kb2VAZXhhbXBsZS5jb20iLCJleHAiOjE3NDQwMzM5OTIsIm5hbWUiOiJqb2huZG9lIiwidXNlcl9pZCI6MX0.zVjQdc5MwUyowa_O3aFbCZgpnslMKq11L3GbH_9SkVE
+}
+
+body:json {
+  {
+    "Title": "Post Title Edit",
+    "Content": "Post Content"
+  }
+}

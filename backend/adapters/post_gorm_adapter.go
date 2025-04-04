@@ -46,7 +46,11 @@ func (p *postGormRepository) GetPostByID(id uint) (*core.Post, error) {
 
 // GetPostsByUserID implements core.PostRepository.
 func (p *postGormRepository) GetPostsByUserID(userID uint) ([]core.Post, error) {
-	panic("unimplemented")
+	posts := []core.Post{}
+	if p.db.Where("user_id = ?", userID).Find(&posts).Error != nil {
+		return nil, p.db.Error
+	}
+	return posts, nil
 }
 
 // UpdatePost implements core.PostRepository.

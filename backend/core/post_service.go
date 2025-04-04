@@ -54,7 +54,11 @@ func (p *postServiceImpl) GetPostByID(id uint) (*Post, error) {
 
 // GetPostsByUserID implements PostService.
 func (p *postServiceImpl) GetPostsByUserID(userID uint) ([]Post, error) {
-	panic("unimplemented")
+	posts, err := p.repo.GetPostsByUserID(userID)
+	if err != nil {
+		return nil, err
+	}
+	return posts, nil
 }
 
 // UpdatePost implements PostService.
