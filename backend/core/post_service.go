@@ -55,7 +55,21 @@ func (p *postServiceImpl) GetPostsByUserID(userID uint) ([]Post, error) {
 
 // UpdatePost implements PostService.
 func (p *postServiceImpl) UpdatePost(post *Post) (*Post, error) {
-	panic("unimplemented")
+	fmt.Println(post.ID)
+	oldPost, err := p.repo.GetPostByID(post.ID)
+	if err != nil {
+		return nil, err
+	}
+	if oldPost.UserID != CurrentUser.ID {
+		println("you are not authorized to update this post")
+		return nil, fmt.Errorf("you are not authorized to update this post")
+	}
+	oldPost.Title = post.Title
+	oldPost.Content = post.Content
+	if err := p.repo.UpdatePost(oldPost); err != nil {
+		return nil, err
+	}
+	return oldPost, nil
 }
 
 func NewPostService(repo PostRepository) PostService {

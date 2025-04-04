@@ -49,10 +49,15 @@ func (h *PostHandler) CreatePost(c *fiber.Ctx) error {
 }
 
 func (h *PostHandler) UpdatePost(c *fiber.Ctx) error {
+	id, err := strconv.Atoi(c.Params("id"))
+	if err != nil {
+		return c.SendStatus(fiber.StatusBadRequest)
+	}
 	var post core.Post
 	if err := c.BodyParser(&post); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}
+	post.ID = uint(id)
 	updatedPost, err := h.postService.UpdatePost(&post)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})

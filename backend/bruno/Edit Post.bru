@@ -1,11 +1,11 @@
 meta {
-  name: Get Post
+  name: Edit Post
   type: http
-  seq: 7
+  seq: 8
 }
 
-get {
-  url: http://localhost:3000/posts
+put {
+  url: http://localhost:3000/posts/8
   body: json
   auth: bearer
 }
@@ -16,7 +16,7 @@ auth:bearer {
 
 body:json {
   {
-    "Title": "Post Title",
+    "Title": "Post Title Edit",
     "Content": "Post Content"
   }
 }

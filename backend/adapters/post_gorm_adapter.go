@@ -48,7 +48,10 @@ func (p *postGormRepository) GetPostsByUserID(userID uint) ([]core.Post, error) 
 
 // UpdatePost implements core.PostRepository.
 func (p *postGormRepository) UpdatePost(post *core.Post) error {
-	panic("unimplemented")
+	if result := p.db.Save(post); result.Error != nil {
+		return result.Error
+	}
+	return nil
 }
 
 func NewGormPostRepository(db *gorm.DB) core.PostRepository {
