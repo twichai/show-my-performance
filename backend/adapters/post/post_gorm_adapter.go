@@ -29,11 +29,11 @@ func (p *postGormRepository) DeletePost(id uint, userID uint) error {
 
 // GetAllPosts implements core.PostRepository.
 func (p *postGormRepository) GetAllPosts() ([]model.Post, error) {
-	post := []model.Post{}
-	if p.db.Order("updated_at desc").Limit(10).Find(&post).Error != nil {
+	posts := []model.Post{}
+	if err := p.db.Preload("User").Order("updated_at desc").Limit(10).Find(&posts).Error; err != nil {
 		return nil, p.db.Error
 	}
-	return post, nil
+	return posts, nil
 }
 
 // GetPostByID implements core.PostRepository.
