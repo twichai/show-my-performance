@@ -6,6 +6,6 @@ type Post struct {
 	gorm.Model
 	Title    string `json:"title" form:"title"`
 	Content  string `json:"content" form:"content"`
-	ImageUrl string `json:"image_url" form:"image_url"`
-	UserID   uint   `json:"user_id" form:"user_id"`
+	ImageUrl string `json:"imageUrl" form:"ImageUrl"`
+	UserID   uint   `json:"UserId" form:"UserId"`
 }
