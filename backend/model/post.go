@@ -8,4 +8,5 @@ type Post struct {
 	Content  string `json:"content" form:"content"`
 	ImageUrl string `json:"imageUrl" form:"ImageUrl"`
 	UserID   uint   `json:"UserId" form:"UserId"`
+	User     User   `json:"user"`
 }
