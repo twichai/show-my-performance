@@ -1,7 +1,8 @@
-package adapters
+package postAdapter
 
 import (
-	"show-my-performance/backend/core"
+	postCore "show-my-performance/backend/core/post"
+	"show-my-performance/backend/model"
 
 	"gorm.io/gorm"
 )
@@ -11,7 +12,7 @@ type postGormRepository struct {
 }
 
 // CreatePost implements core.PostRepository.
-func (p *postGormRepository) CreatePost(post *core.Post) error {
+func (p *postGormRepository) CreatePost(post *model.Post) error {
 	if result := p.db.Create(&post); result.Error != nil {
 		return result.Error
 	}
@@ -20,15 +21,15 @@ func (p *postGormRepository) CreatePost(post *core.Post) error {
 
 // DeletePost implements core.PostRepository.
 func (p *postGormRepository) DeletePost(id uint, userID uint) error {
-	if result := p.db.Delete(&core.Post{}, id).Where(userID); result.Error != nil {
+	if result := p.db.Delete(&model.Post{}, id).Where(userID); result.Error != nil {
 		return result.Error
 	}
 	return nil
 }
 
 // GetAllPosts implements core.PostRepository.
-func (p *postGormRepository) GetAllPosts() ([]core.Post, error) {
-	post := []core.Post{}
+func (p *postGormRepository) GetAllPosts() ([]model.Post, error) {
+	post := []model.Post{}
 	if p.db.Order("updated_at desc").Limit(10).Find(&post).Error != nil {
 		return nil, p.db.Error
 	}
@@ -36,8 +37,8 @@ func (p *postGormRepository) GetAllPosts() ([]core.Post, error) {
 }
 
 // GetPostByID implements core.PostRepository.
-func (p *postGormRepository) GetPostByID(id uint) (*core.Post, error) {
-	post := &core.Post{}
+func (p *postGormRepository) GetPostByID(id uint) (*model.Post, error) {
+	post := &model.Post{}
 	if p.db.First(post, id).Error != nil {
 		return nil, p.db.Error
 	}
@@ -45,8 +46,8 @@ func (p *postGormRepository) GetPostByID(id uint) (*core.Post, error) {
 }
 
 // GetPostsByUserID implements core.PostRepository.
-func (p *postGormRepository) GetPostsByUserID(userID uint) ([]core.Post, error) {
-	posts := []core.Post{}
+func (p *postGormRepository) GetPostsByUserID(userID uint) ([]model.Post, error) {
+	posts := []model.Post{}
 	if p.db.Where("user_id = ?", userID).Find(&posts).Error != nil {
 		return nil, p.db.Error
 	}
@@ -54,13 +55,13 @@ func (p *postGormRepository) GetPostsByUserID(userID uint) ([]core.Post, error) 
 }
 
 // UpdatePost implements core.PostRepository.
-func (p *postGormRepository) UpdatePost(post *core.Post) error {
+func (p *postGormRepository) UpdatePost(post *model.Post) error {
 	if result := p.db.Save(post); result.Error != nil {
 		return result.Error
 	}
 	return nil
 }
 
-func NewGormPostRepository(db *gorm.DB) core.PostRepository {
+func NewGormPostRepository(db *gorm.DB) postCore.PostRepository {
 	return &postGormRepository{db: db}
 }

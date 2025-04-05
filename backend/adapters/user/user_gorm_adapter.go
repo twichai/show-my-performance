@@ -1,7 +1,8 @@
-package adapters
+package userAdapter
 
 import (
-	"show-my-performance/backend/core"
+	userCore "show-my-performance/backend/core/user"
+	"show-my-performance/backend/model"
 
 	"gorm.io/gorm"
 )
@@ -11,8 +12,8 @@ type GormUserRepository struct {
 }
 
 // GetByEmail implements core.UserRepository.
-func (r *GormUserRepository) GetByEmail(userEmail string) (*core.User, error) {
-	var user core.User
+func (r *GormUserRepository) GetByEmail(userEmail string) (*model.User, error) {
+	var user model.User
 	if err := r.db.Where("email = ?", userEmail).First(&user).Error; err != nil {
 		return nil, err
 	}
@@ -23,11 +24,11 @@ type GormOrderRepository struct {
 	db *gorm.DB
 }
 
-func NewGormUserRepository(db *gorm.DB) core.UserRepository {
+func NewGormUserRepository(db *gorm.DB) userCore.UserRepository {
 	return &GormUserRepository{db: db}
 }
 
-func (r *GormUserRepository) Save(user core.User) error {
+func (r *GormUserRepository) Save(user model.User) error {
 	if result := r.db.Create(&user); result.Error != nil {
 		return result.Error
 	}

@@ -1,21 +1,22 @@
-package core
+package userCore
 
 import (
 	"fmt"
+	"show-my-performance/backend/model"
 
 	"golang.org/x/crypto/bcrypt"
 )
 
 type UserService interface {
-	RegisterUser(user User) error
-	Login(user User) (*User, error)
+	RegisterUser(user model.User) error
+	Login(user model.User) (*model.User, error)
 }
 type userServiceImpl struct {
 	repo UserRepository
 }
 
 // Login implements UserService.
-func (o *userServiceImpl) Login(user User) (*User, error) {
+func (o *userServiceImpl) Login(user model.User) (*model.User, error) {
 	if user.Email == "" || user.Password == "" {
 		return nil, fmt.Errorf("email and password are required")
 	}
@@ -41,7 +42,7 @@ func HashPassword(password string) (string, error) {
 	return string(hash), nil
 }
 
-func (o *userServiceImpl) RegisterUser(user User) error {
+func (o *userServiceImpl) RegisterUser(user model.User) error {
 
 	if user.Username == "" || user.Password == "" || user.Email == "" {
 		return fmt.Errorf("username, password, and email are required")

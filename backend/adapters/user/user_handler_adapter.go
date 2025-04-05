@@ -1,8 +1,9 @@
-package adapters
+package userAdapter
 
 import (
 	"os"
-	"show-my-performance/backend/core"
+	userCore "show-my-performance/backend/core/user"
+	"show-my-performance/backend/model"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -10,17 +11,17 @@ import (
 )
 
 type UserHandler struct {
-	userService core.UserService
+	userService userCore.UserService
 }
 
-func NewUserHandler(userService core.UserService) *UserHandler {
+func NewUserHandler(userService userCore.UserService) *UserHandler {
 	return &UserHandler{
 		userService: userService,
 	}
 }
 
 func (h *UserHandler) Login(c *fiber.Ctx) error {
-	var user core.User
+	var user model.User
 	if err := c.BodyParser(&user); err != nil {
 		print(err.Error())
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": "Invalid input"})
@@ -50,7 +51,7 @@ func (h *UserHandler) Login(c *fiber.Ctx) error {
 
 }
 func (h *UserHandler) RegisterUser(c *fiber.Ctx) error {
-	var user core.User
+	var user model.User
 	if err := c.BodyParser(&user); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid input"})
 	}

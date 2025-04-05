@@ -3,8 +3,11 @@ package main
 import (
 	"log"
 	"os"
-	"show-my-performance/backend/adapters"
-	"show-my-performance/backend/core"
+	postAdapter "show-my-performance/backend/adapters/post"
+	userAdapter "show-my-performance/backend/adapters/user"
+	postCore "show-my-performance/backend/core/post"
+	userCore "show-my-performance/backend/core/user"
+	"show-my-performance/backend/model"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -41,8 +44,8 @@ func initDB() {
 	if err != nil {
 		log.Fatal("Failed to connect to the database:", err)
 	}
-	DB.AutoMigrate(&core.User{}) // AutoMigrate will create the table if it doesn't exist
-	DB.AutoMigrate(&core.Post{}) // AutoMigrate will create the table if it doesn't exist
+	DB.AutoMigrate(&model.User{}) // AutoMigrate will create the table if it doesn't exist
+	DB.AutoMigrate(&model.Post{}) // AutoMigrate will create the table if it doesn't exist
 }
 
 func getCurrentUser(c *fiber.Ctx) error {
@@ -51,13 +54,15 @@ func getCurrentUser(c *fiber.Ctx) error {
 	userID := claims["user_id"].(float64)
 	email := claims["email"].(string)
 
-	core.CurrentUser.ID = uint(userID)
-	core.CurrentUser.Email = email
+	model.CurrentUser.ID = uint(userID)
+	model.CurrentUser.Email = email
 	return c.Next()
 }
 
 func main() {
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		BodyLimit: 20 * 1024 * 1024, // 20 MB limit
+	})
 	initDB()
 
 	err := godotenv.Load()
@@ -78,9 +83,9 @@ func main() {
 		AllowHeaders: "Origin, Content-Type, Accept, Authorization", // Allowed headers, including Authorization
 	}))
 
-	userRepository := adapters.NewGormUserRepository(DB)
-	userService := core.NewUserService(userRepository)
-	userHandler := adapters.NewUserHandler(userService)
+	userRepository := userAdapter.NewGormUserRepository(DB)
+	userService := userCore.NewUserService(userRepository)
+	userHandler := userAdapter.NewUserHandler(userService)
 
 	app.Post("/signup", userHandler.RegisterUser)
 	app.Post("/login", userHandler.Login)
@@ -90,9 +95,9 @@ func main() {
 	}))
 	app.Use(getCurrentUser)
 
-	postRepository := adapters.NewGormPostRepository(DB)
-	postService := core.NewPostService(postRepository)
-	postHandler := adapters.NewPostHandler(postService)
+	postRepository := postAdapter.NewGormPostRepository(DB)
+	postService := postCore.NewPostService(postRepository)
+	postHandler := postAdapter.NewPostHandler(postService)
 
 	app.Get("/posts", postHandler.GetAllPosts)
 	app.Get("/posts/:id", postHandler.GetPostByID)
