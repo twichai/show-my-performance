@@ -6,7 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { LoginService } from '../../services/login.service';
-import { Token } from '../../model/token.model';
+import { Token } from '../../models/token.model';
 import { Router } from '@angular/router';
 
 @Component({

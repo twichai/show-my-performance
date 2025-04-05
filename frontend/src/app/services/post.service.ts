@@ -1,0 +1,33 @@
+import { HttpClient, HttpHandler } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class PostService {
+  private apiUrl = 'http://localhost:3000';
+  token: string = '';
+
+  constructor(private http: HttpClient) {
+    this.token = localStorage.getItem('token') || '';
+  }
+  createPost({
+    title,
+    content,
+    image,
+  }: {
+    title: string;
+    content: string;
+    image: File | null;
+  }) {
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('content', content);
+    if (image) {
+      formData.append('image', image, image.name);
+    }
+
+    const headers = { Authorization: `Bearer ${this.token}` };
+    return this.http.post(`${this.apiUrl}/posts`, formData, { headers });
+  }
+}
