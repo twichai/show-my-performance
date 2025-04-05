@@ -30,4 +30,10 @@ export class PostService {
     const headers = { Authorization: `Bearer ${this.token}` };
     return this.http.post(`${this.apiUrl}/posts`, formData, { headers });
   }
+
+  getPosts() {
+    return this.http.get(`${this.apiUrl}/posts`, {
+      headers: { Authorization: `Bearer ${this.token}` },
+    });
+  }
 }

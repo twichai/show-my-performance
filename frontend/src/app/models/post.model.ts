@@ -8,6 +8,8 @@ export interface Post {
   createdAt: string;
   updatedAt: string;
   imageUrl?: string;
+  upvotes?: number;
+  downvotes?: number;
   userId: number;
   user?: User;
 }

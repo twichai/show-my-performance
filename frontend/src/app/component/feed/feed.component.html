@@ -5,7 +5,9 @@
     <div class="p-4">
       <!-- Post Header -->
       <div class="flex items-center text-gray-500 text-sm">
-        <span>Posted by u/{{ post.username }} · {{ post.time }}</span>
+        <span
+          >Posted by u/{{ post.user?.username }} · {{ post.createdAt }}</span
+        >
       </div>
 
       <!-- Post Title -->
@@ -15,9 +17,10 @@
       <p class="mt-2 text-gray-400">{{ post.content }}</p>
 
       <!-- Post Image (Optional) -->
-      @if (post.image) {
+
+      @if (post.imageUrl) {
       <img
-        [src]="post.image"
+        [src]="post.imageUrl"
         class="mt-2 rounded-lg max-h-60 w-full object-cover"
       />
       }
@@ -31,7 +34,8 @@
           👎 {{ post.downvotes }}
         </button>
         <button class="btn btn-sm btn-ghost">
-          💬 {{ post.comments.length }} Comments
+          <!-- 💬 {{ post.comments.length }} Comments -->
+          💬 xx Comments
         </button>
       </div>
     </div>
