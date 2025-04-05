@@ -5,12 +5,14 @@ import (
 	"os"
 	"show-my-performance/backend/adapters"
 	"show-my-performance/backend/core"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+	gormLogger "gorm.io/gorm/logger"
 
 	jwtware "github.com/gofiber/contrib/jwt"
 	"github.com/golang-jwt/jwt/v5"
@@ -22,7 +24,20 @@ var DB *gorm.DB
 // Initialize SQLite database
 func initDB() {
 	var err error
-	DB, err = gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
+	// Configure GORM logger
+	newLogger := gormLogger.New(
+		log.New(os.Stdout, "\r\n", log.LstdFlags), // Writer for logging
+		gormLogger.Config{
+			SlowThreshold:             time.Second,     // Log queries slower than this threshold
+			LogLevel:                  gormLogger.Info, // Log level
+			IgnoreRecordNotFoundError: true,            // Ignore ErrRecordNotFound errors
+			Colorful:                  true,            // Enable color output
+		},
+	)
+
+	DB, err = gorm.Open(sqlite.Open("test.db"), &gorm.Config{
+		Logger: newLogger, // Use the configured logger
+	})
 	if err != nil {
 		log.Fatal("Failed to connect to the database:", err)
 	}
@@ -51,11 +66,16 @@ func main() {
 	}
 	secretKey := os.Getenv("SECRET_KEY")
 
-	app.Use(logger.New(logger.Config{}))
+	// Fiber logger middleware
+	app.Use(logger.New(logger.Config{
+		Format:     "[${time}] ${status} - ${method} ${path}\n", // Custom log format
+		TimeFormat: "2006-01-02 15:04:05",                       // Time format
+		TimeZone:   "Local",                                     // Timezone
+	}))
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: "*",                            // Allow all origins (use specific domains in production)
-		AllowMethods: "GET,POST,PUT,DELETE",          // Allowed HTTP methods
-		AllowHeaders: "Origin, Content-Type, Accept", // Allowed headers
+		AllowOrigins: "*",                                           // Allow all origins (use specific domains in production)
+		AllowMethods: "GET,POST,PUT,DELETE",                         // Allowed HTTP methods
+		AllowHeaders: "Origin, Content-Type, Accept, Authorization", // Allowed headers, including Authorization
 	}))
 
 	userRepository := adapters.NewGormUserRepository(DB)
