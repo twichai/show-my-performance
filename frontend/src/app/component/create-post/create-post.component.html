@@ -1,0 +1,70 @@
+<div class="max-w-3xl mx-auto mt-6 p-6 bg-base-100 shadow-md rounded-lg">
+  <h2 class="text-xl font-bold mb-4">Create a Post</h2>
+
+  <form (ngSubmit)="submitPost()" [formGroup]="postForm">
+    <!-- Select Community -->
+    <div class="form-control mb-4">
+      <label class="label">
+        <span class="label-text">Choose a community</span>
+      </label>
+      <select formControlName="community" class="select select-bordered w-full">
+        @for (community of communities; track communities) {
+        <option [value]="community">
+          {{ community }}
+        </option>
+        }
+      </select>
+    </div>
+
+    <!-- Post Title -->
+    <div class="form-control mb-4">
+      <label class="label">
+        <span class="label-text">Title</span>
+      </label>
+      <input
+        formControlName="title"
+        type="text"
+        class="input input-bordered w-full"
+        placeholder="Enter your post title"
+        required
+      />
+    </div>
+
+    <!-- Post Content -->
+    <div class="form-control mb-4">
+      <label class="label">
+        <span class="label-text">Content</span>
+      </label>
+      <textarea
+        formControlName="content"
+        class="textarea textarea-bordered w-full"
+        placeholder="What's on your mind?"
+        rows="5"
+        required
+      ></textarea>
+    </div>
+
+    <!-- Image Upload -->
+    <div class="form-control mb-4">
+      <label class="label">
+        <span class="label-text">Upload Image (Optional)</span>
+      </label>
+      <input
+        type="file"
+        (change)="onFileSelected($event)"
+        class="file-input file-input-bordered w-full"
+      />
+    </div>
+
+    <!-- Submit Button -->
+    <div class="flex justify-end">
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="postForm.invalid"
+      >
+        Post
+      </button>
+    </div>
+  </form>
+</div>
