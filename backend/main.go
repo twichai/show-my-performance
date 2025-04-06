@@ -44,8 +44,7 @@ func initDB() {
 	if err != nil {
 		log.Fatal("Failed to connect to the database:", err)
 	}
-	DB.AutoMigrate(&model.User{}) // AutoMigrate will create the table if it doesn't exist
-	DB.AutoMigrate(&model.Post{}) // AutoMigrate will create the table if it doesn't exist
+	DB.AutoMigrate(&model.User{}, &model.Post{}, &model.Reaction{})
 }
 
 func getCurrentUser(c *fiber.Ctx) error {

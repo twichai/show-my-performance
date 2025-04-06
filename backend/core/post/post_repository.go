@@ -9,4 +9,6 @@ type PostRepository interface {
 	UpdatePost(post *model.Post) error
 	DeletePost(id uint, userID uint) error
 	GetPostsByUserID(userID uint) ([]model.Post, error)
+	LikePost(postID uint, userID uint) error
+	DislikePost(postID uint, userID uint) error
 }

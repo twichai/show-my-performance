@@ -11,6 +11,19 @@ type postGormRepository struct {
 	db *gorm.DB
 }
 
+// DislikePost implements postCore.PostRepository.
+func (p *postGormRepository) DislikePost(postID uint, userID uint) error {
+	if result := p.db.Model(&model.Post{}).Where("id = ? AND user_id = ?", postID, userID).Update("likes", gorm.Expr("likes - 1")); result.Error != nil {
+		return result.Error
+	}
+	return nil
+}
+
+// LikePost implements postCore.PostRepository.
+func (p *postGormRepository) LikePost(postID uint, userID uint) error {
+	panic("unimplemented")
+}
+
 // CreatePost implements core.PostRepository.
 func (p *postGormRepository) CreatePost(post *model.Post) error {
 	if result := p.db.Create(&post); result.Error != nil {
