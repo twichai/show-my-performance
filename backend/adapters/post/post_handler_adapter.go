@@ -64,7 +64,12 @@ func (h *PostHandler) UpdatePost(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}
 	post.ID = uint(id)
-	updatedPost, err := h.postService.UpdatePost(&post)
+	form, err := c.MultipartForm()
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "failed to parse form data"})
+	}
+	files := form.File["image"]
+	updatedPost, err := h.postService.UpdatePost(&post, files)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
