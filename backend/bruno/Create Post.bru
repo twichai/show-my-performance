@@ -6,12 +6,12 @@ meta {
 
 post {
   url: http://localhost:3000/posts
-  body: json
+  body: multipartForm
   auth: bearer
 }
 
 auth:bearer {
-  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5kb2VAZXhhbXBsZS5jb20iLCJleHAiOjE3NDQwMzM5OTIsIm5hbWUiOiJqb2huZG9lIiwidXNlcl9pZCI6MX0.zVjQdc5MwUyowa_O3aFbCZgpnslMKq11L3GbH_9SkVE
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5kb2VAZXhhbXBsZS5jb20iLCJleHAiOjE3NDU3OTM1MzQsIm5hbWUiOiJqb2huZG9lIiwidXNlcl9pZCI6Mn0.HUMJAGhWcIrFW5KSZfJYPFNM1QpHaYzILsIv_FLt1fw
 }
 
 body:json {
@@ -19,4 +19,14 @@ body:json {
     "Title": "Post Title",
     "Content": "Post Content"
   }
+}
+
+body:multipart-form {
+  Title: test
+  Content: test
+  image: @file()
+}
+
+body:file {
+  file: @file()
 }
