@@ -1,13 +1,26 @@
 <div class="max-w-4xl mx-auto mt-6">
   <!-- Loop through posts -->
-  @for (post of posts; track post.id) {
+  @for (post of store.posts(); track post.ID) {
   <div class="card bg-base-100 shadow-xl mb-4">
     <div class="p-4">
       <!-- Post Header -->
-      <div class="flex items-center text-gray-500 text-sm">
-        <span
-          >Posted by u/{{ post.user?.username }} · {{ post.createdAt }}</span
-        >
+      <div class="flex justify-between">
+        <div class="flex items-center text-gray-500 text-sm">
+          <span
+            >Posted by u/{{ post.user?.username }} · {{ post.createdAt }}</span
+          >
+        </div>
+        <!-- add edit btn -->
+        @if(post.UserId == 2) {
+          <div>
+            <button class="btn btn-sm btn-ghost" (click)="editPost(post.ID)">
+              Edit
+            </button>
+            <button class="btn btn-sm btn-ghost" (click)="deletePost(post)">
+              Delete
+            </button>
+          </div>
+        }
       </div>
 
       <!-- Post Title -->

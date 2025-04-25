@@ -1,7 +1,7 @@
 import { User } from './user.model';
 
 export interface Post {
-  id: number;
+  ID: number;
   title: string;
   content: string;
   community: string;
@@ -10,6 +10,6 @@ export interface Post {
   imageUrl?: string;
   upvotes?: number;
   downvotes?: number;
-  userId: number;
+  UserId: number;
   user?: User;
 }
