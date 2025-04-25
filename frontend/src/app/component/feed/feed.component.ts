@@ -3,6 +3,7 @@ import { PostService } from '../../services/post.service';
 import { Post } from '../../models/post.model';
 import { PostStore } from '../../store/post.store';
 import { Router } from '@angular/router';
+import { User } from '../../models/user.model';
 
 @Component({
   selector: 'app-feed',
@@ -12,8 +13,9 @@ import { Router } from '@angular/router';
 })
 export class FeedComponent {
 
-  constructor(@Inject(PostService) private postsService: PostService, public store: PostStore, private router: Router ) {}
+  constructor(@Inject(PostService) private postsService: PostService, public store: PostStore, private router: Router) { }
   posts: Post[] = [];
+  user: User = JSON.parse(localStorage.getItem('user') || '{}');
 
   ngOnInit() {
     this.postsService.getPosts().subscribe((res) => {
@@ -25,7 +27,7 @@ export class FeedComponent {
   }
 
   deletePost(_t2: Post) {
-  throw new Error('Method not implemented.');
+    throw new Error('Method not implemented.');
   }
 
   editPost(postId: number) {

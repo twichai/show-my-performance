@@ -11,7 +11,7 @@
           >
         </div>
         <!-- add edit btn -->
-        @if(post.UserId == 2) {
+        @if(post.UserId == user.ID) {
           <div>
             <button class="btn btn-sm btn-ghost" (click)="editPost(post.ID)">
               Edit

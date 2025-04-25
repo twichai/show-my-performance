@@ -41,6 +41,7 @@ export class LoginComponent {
           (response: Token) => {
             if (response.token) {
               localStorage.setItem('token', response.token);
+              localStorage.setItem('user', JSON.stringify(response.user));
               this.errorMessage = '';
               this.route.navigate(['/']);
               // Redirect to the dashboard or another page
