@@ -14,6 +14,7 @@ export const routes: Routes = [
     children: [
       { path: '', component: FeedComponent },
       { path: 'create-post', component: CreatePostComponent },
+      { path: 'edit-post/:id', component: CreatePostComponent },
     ],
   },
   { path: 'login', component: LoginComponent },

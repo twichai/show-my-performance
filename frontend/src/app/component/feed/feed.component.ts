@@ -32,8 +32,7 @@ export class FeedComponent {
 
   editPost(postId: number) {
     console.log('Editing post with ID:', postId);
-    this.router.navigate(['/create-post', postId]);
-    this.router.navigate(['/create-post']);
+    this.router.navigate(['/edit-post', postId]);
   }
 
   upvote(post: any) {

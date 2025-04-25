@@ -1,5 +1,7 @@
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Post } from '../models/post.model';
 
 @Injectable({
   providedIn: 'root',
@@ -33,6 +35,12 @@ export class PostService {
 
   getPosts() {
     return this.http.get(`${this.apiUrl}/posts`, {
+      headers: { Authorization: `Bearer ${this.token}` },
+    });
+  }
+
+  getPostById(postId: string): Observable<Post> {
+    return this.http.get<Post>(`${this.apiUrl}/posts/${postId}`, {
       headers: { Authorization: `Bearer ${this.token}` },
     });
   }

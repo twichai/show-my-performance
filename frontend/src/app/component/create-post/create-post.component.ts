@@ -8,6 +8,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PostService } from '../../services/post.service';
+import { Post } from '../../models/post.model';
 @Component({
   selector: 'app-create-post',
   imports: [ReactiveFormsModule],
@@ -36,11 +37,27 @@ export class CreatePostComponent {
   selectedImage: File | null = null;
   communities = ['r/Angular', 'r/WebDev', 'r/Technology', 'r/Programming'];
 
+  ngOnInit() {
+    //get post Id from url
+    const url = this.router.url;
+    const postId = url.split('/').pop();
+    if (postId) {
+      this.postService.getPostById(postId).subscribe((res: Post) => {
+        this.postForm.patchValue({
+          title: res.title,
+          content: res.content,
+          community: res.community,
+        });
+      });
+    }
+  }
+
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
       this.selectedImage = file;
     }
+
   }
 
   submitPost() {
