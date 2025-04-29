@@ -44,4 +44,11 @@ export class PostService {
       headers: { Authorization: `Bearer ${this.token}` },
     });
   }
+
+
+  deletePost(ID: number) {
+    return this.http.delete(`${this.apiUrl}/posts/${ID}`, {
+      headers: { Authorization: `Bearer ${this.token}` },
+    });
+  }
 }

@@ -26,8 +26,10 @@ export class FeedComponent {
     });
   }
 
-  deletePost(_t2: Post) {
-    throw new Error('Method not implemented.');
+  deletePost(Post: Post) {
+    this.postsService.deletePost(Post.ID).subscribe((res) => {
+      this.store.deletePost(Post.ID);
+    })
   }
 
   editPost(postId: number) {
